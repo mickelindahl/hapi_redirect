@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/mickelindahl/hapi_redirect.svg?branch=master)](https://travis-ci.org/mickelindahl/hapi_redirect)
+[![Coverage Status](https://coveralls.io/repos/github/mickelindahl/hapi_redirect/badge.svg?branch=master)](https://coveralls.io/github/mickelindahl/hapi_redirect?branch=master)
+
 Hapi redirect
 =============
 
