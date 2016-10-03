@@ -18,9 +18,8 @@ const server = new Hapi.Server( { port: 3000 } );
 server.register( {
     register: require( 'hapi-redirect' ),
     options: { 
-        "401": {
-            "redirect": "/login"
-        }
+        status_code: "401"
+        redirect: "/login"
     }
 }, ( err ) => {
     // Oh no!
