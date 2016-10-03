@@ -1,0 +1,38 @@
+{
+  "name": "hapi-redirect",
+  "version": "1.0.0",
+  "description": "Library for redirecting unauthorized request to another endpoint",
+  "main": "index.js",
+  "scripts": {
+    "test": "lab.cmd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mickelindahl/hapi_redirect.git"
+  },
+  "keywords": [
+    "redirect",
+    "hapi",
+    "server",
+    "endpoint",
+    "authorization"
+  ],
+  "author": "Mikael Lindahl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mickelindahl/hapi_redirect/issues"
+  },
+  "homepage": "https://github.com/mickelindahl/hapi_redirect#readme",
+  "devDependencies": {
+    "code": "^4.0.0",
+    "debug": "^2.2.0",
+    "handlebars": "^4.0.5",
+    "hapi": "^15.1.1",
+    "hapi-auth-jwt": "^4.0.0",
+    "lab": "^11.1.0",
+    "vision": "^4.1.0"
+  },
+  "dependencies": {
+    "debug": "^2.2.0"
+  }
+}
