@@ -7,13 +7,10 @@
 const Hapi = require( 'hapi' );
 const handlebars = require( 'handlebars' );
 const path = require( 'path' );
-const debug = require( 'debug' )( 'hapi_redirect:server' );
 
 let server = new Hapi.Server();
 
 server.connection( { host: '0.0.0.0', port: 3000 } );
-
-debug( 'server connected' );
 
 server.register( [{
 
@@ -24,18 +21,13 @@ server.register( [{
     {
         register: require( './index.js' ),
         options: {
-            "401": {
-                "redirect": "/login"
-            }
+            status_code: "401",
+            redirect: "/login"
         }
     },
 ] ).then( ()=> {
 
-    debug( 'start kicking' );
-
     server.auth.strategy( 'jwt', 'jwt', { key: 'secret' } );
-
-    debug( 'auth set' )
 
     server.views( {
         engines: {
@@ -44,8 +36,6 @@ server.register( [{
         relativeTo: path.resolve(),
         path: './views'
     } );
-
-    debug( 'views set' );
 
     server.route( [
         {
@@ -64,17 +54,13 @@ server.register( [{
 
     ] );
 
-    debug( 'routes set' );
-
     server.start( ( err ) => {
 
         if ( err ) {
             throw err;
         }
 
-        console.log( `Server running at: ${server.info.uri}` );
         server.app.readyForTest = true;
-        //done()
 
     } );
 

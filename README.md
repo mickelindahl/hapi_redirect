@@ -30,7 +30,7 @@ server.register( {
 
 - `options` Object or list of objects with the following properties:
     - `status_code` Request status code to redirect e.g. 401 - unauthorized  
-    - `redirect` Endpoint to redirect to
+    - `redirect` Redirect endpoint
     - `host` Host that redirection comes from. Only need to be set if different from host redirection goes to. 
 
 ## Tests

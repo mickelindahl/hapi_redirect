@@ -4,8 +4,6 @@
 
 'use strict';
 
-const debug = require( 'debug' )( 'hapi_redirect' );
-
 exports.register = function ( server, options, next ) {
 
     if (typeof options =='object') options=[options];
@@ -13,7 +11,7 @@ exports.register = function ( server, options, next ) {
     let lookup={};
     options.forEach((val)=>{
 
-        lookup[val.status_code]=options
+        lookup[val.status_code]=val
 
     })
 

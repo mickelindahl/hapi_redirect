@@ -4,7 +4,7 @@
   "description": "Library for redirecting unauthorized request to another endpoint",
   "main": "index.js",
   "scripts": {
-    "test": "lab.cmd"
+    "test": "node_modules/.bin/lab -m 10000 -r lcov | ./node_modules/.bin/coveralls"
   },
   "repository": {
     "type": "git",
@@ -25,14 +25,12 @@
   "homepage": "https://github.com/mickelindahl/hapi_redirect#readme",
   "devDependencies": {
     "code": "^4.0.0",
+    "coveralls": "^2.11.14",
     "debug": "^2.2.0",
     "handlebars": "^4.0.5",
     "hapi": "^15.1.1",
     "hapi-auth-jwt": "^4.0.0",
     "lab": "^11.1.0",
     "vision": "^4.1.0"
-  },
-  "dependencies": {
-    "debug": "^2.2.0"
   }
 }
