@@ -31,8 +31,8 @@ server.register( {
 
 - `options` Object or list of objects with the following keys
   - `status_code` Request status code to redirect e.g. 401 - unauthorized  
-  - `redirect` Redirect endpoint
-  - `host` Host that redirection comes from. Only need to be set if different from host redirection goes to. 
+  - `redirect` Endpoint that you want to redirect ro
+  - `host` Host that redirection comes from. Only necessary to set if it differs from the host you are redirecting to. 
 
 ## Tests
 
@@ -46,3 +46,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 ## Release History
 
 * 1.0.0 Initial release
+* 1.0.1 Bug fix
