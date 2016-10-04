@@ -22,7 +22,6 @@ exports.register = function ( server, options, next ) {
 
     })
 
-
     console.log(lookup)
 
     // onPreResponse intercepts ALL errors
@@ -33,8 +32,8 @@ exports.register = function ( server, options, next ) {
         if ( response.isBoom ) {
             let statusCode = response.output.payload.statusCode;
 
-            let redirect = lookup.host
-                ? lookup.host + request.url.path
+            let redirect = lookup[statusCode].host
+                ? lookup[statusCode].host + request.url.path
                 : request.url.path;
 
             if ( lookup[statusCode] && lookup[statusCode].redirect ) {
