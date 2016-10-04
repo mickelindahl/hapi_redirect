@@ -22,8 +22,6 @@ exports.register = function ( server, options, next ) {
 
     })
 
-    console.log(lookup)
-
     // onPreResponse intercepts ALL errors
     server.ext( 'onPreResponse', ( request, reply ) => {
 
