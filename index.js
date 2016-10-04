@@ -11,6 +11,8 @@ exports.register = function ( server, options, next ) {
     let lookup={};
     options.forEach((val)=>{
 
+        lookup[val.status_code]={}
+
         for (let key in val){
 
             lookup[val.status_code][key]=val[key]
@@ -19,6 +21,9 @@ exports.register = function ( server, options, next ) {
 
 
     })
+
+
+    console.log(lookup)
 
     // onPreResponse intercepts ALL errors
     server.ext( 'onPreResponse', ( request, reply ) => {
