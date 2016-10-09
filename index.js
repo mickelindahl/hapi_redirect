@@ -30,11 +30,12 @@ exports.register = function ( server, options, next ) {
         if ( response.isBoom ) {
             let statusCode = response.output.payload.statusCode;
 
-            let redirect = lookup[statusCode].host
-                ? lookup[statusCode].host + request.url.path
-                : request.url.path;
-
             if ( lookup[statusCode] && lookup[statusCode].redirect ) {
+
+                let redirect = lookup[statusCode].host
+                    ? lookup[statusCode].host + request.url.path
+                    : request.url.path;
+
                 return reply.redirect( lookup[statusCode].redirect
                     + '?redirect=' + redirect )
             }
