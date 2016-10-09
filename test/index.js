@@ -75,6 +75,27 @@ lab.experiment( 'redirect', ()=> {
 
     } )
 
+    lab.test( 'no redirect at 404 (not found)', ( done )=> {
+
+        let options = {
+            method: "GET",
+            url: "/no",
+            credentials: {} // To bypass auth strategy
+        };
+
+        debug('before inject')
+
+        server.inject( options, ( response )=> {
+
+            debug(response)
+
+            code.expect( response.statusCode ).to.equal( 404 );
+            done();
+
+        } );
+
+    } )
+
 
 
 } );
