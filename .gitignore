@@ -4,3 +4,6 @@ node_modules
 
 # Ignore Idea stuff
 .idea
+
+# No coverage reports
+coverage.html

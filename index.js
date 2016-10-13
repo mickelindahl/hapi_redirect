@@ -4,9 +4,11 @@
 
 'use strict';
 
+const debug = require('debug')('hapi-redirect:index')
+
 exports.register = function ( server, options, next ) {
 
-    if (typeof options =='object') options=[options];
+    if (options.constructor !== Array ) options=[options];
 
     let lookup={};
     options.forEach((val)=>{
@@ -19,13 +21,14 @@ exports.register = function ( server, options, next ) {
 
         }
 
-
     })
 
     // onPreResponse intercepts ALL errors
     server.ext( 'onPreResponse', ( request, reply ) => {
 
         const response = request.response;
+
+        debug(lookup)
 
         if ( response.isBoom ) {
             let statusCode = response.output.payload.statusCode;
