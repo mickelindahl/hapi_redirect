@@ -12,9 +12,9 @@ const start_server = require( '../test_server.js' );
 
 let lab = exports.lab = Lab.script();
 
-lab.experiment( 'redirect', ()=> {
+lab.experiment( 'activedirectory', ()=> {
 
-    lab.test( 'redirect at 401 (unauthorized)', ( done )=> {
+    lab.test( 'authentication', ( done )=> {
 
         start_server( {
             redirect: {
@@ -22,6 +22,8 @@ lab.experiment( 'redirect', ()=> {
                 redirect: "/login"
             }
         } ).then( ( server )=> {
+
+            server.method.authenticate()
             let options = {
                 method: "GET",
                 url: "/private",
@@ -31,7 +33,7 @@ lab.experiment( 'redirect', ()=> {
             server.inject( options, ( response )=> {
 
                 code.expect( response.statusCode ).to.equal( 302 );
-                server.stop()
+                server.stop();
                 done();
 
             } );

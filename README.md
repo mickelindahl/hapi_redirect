@@ -8,7 +8,7 @@ A small library for redirecting requests based on http/s status code to another 
 
 ## Installation
 
-  npm install hapi-redirect
+  npm install --save hapi-redirect
 
 ## Usage
 ```js
