@@ -1,13 +1,14 @@
 {
   "name": "hapi-redirect",
-  "version": "1.0.3",
+  "version": "2.0.3",
   "description": "Library for redirecting unauthorized request to another endpoint",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/lab -m 10000 -r lcov | ./node_modules/.bin/coveralls",
     "test-locally": "./node_modules/.bin/lab -l -m 15000 test/index.js",
     "test-cov-html": "lab -r html -o coverage.html",
-    "test-jenkins": "node_modules/.bin/lab -m 10000 -r tap -o test.tap -r clover -o clover.xml -r junit -o junit.xml"
+    "test-jenkins": "node_modules/.bin/lab -m 10000 -r tap -o test.tap -r clover -o clover.xml -r junit -o junit.xml",
+    "publish": "$(npm bin)/npm-publish-git-tag"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,9 @@
     "endpoint",
     "authorization"
   ],
-  "author": "Mikael Lindahl",
+  "author": {
+    "name": "Mikael Lindahl"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mickelindahl/hapi_redirect/issues"
@@ -37,5 +40,7 @@
     "lab": "^15.1.2",
     "npm-publish-git-tag": "^1.1.14",
     "vision": "^5.3.0"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "hapi-redirect@1.0.3"
 }
