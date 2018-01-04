@@ -42,11 +42,3 @@ server.register( {
 
 In lieu of a formal styleguide, take care to maintain the existing coding style.
 Add unit tests for any new or changed functionality. Lint and test your code.
-
-## Release History
-
-* 1.0.0 Initial release
-* 1.0.1 Bug fix
-* 1.0.2 Bug fix
-* 1.0.3 100 % coverage and bug fix
-* v2.0.6 updated to work with hapi 17
