@@ -36,7 +36,7 @@ server.register( {
 
 ## Tests
 
-  Lab.cmd
+`npm run-script test-locally`
 
 ## Contributing
 
