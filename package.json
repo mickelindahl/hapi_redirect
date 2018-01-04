@@ -1,6 +1,6 @@
 {
   "name": "hapi-redirect",
-  "version": "v2.0.7",
+  "version": "2.0.9",
   "description": "Library for redirecting unauthorized request to another endpoint",
   "main": "index.js",
   "scripts": {
