@@ -7,7 +7,7 @@
     "test": "node_modules/.bin/lab -m 10000 -r lcov | ./node_modules/.bin/coveralls",
     "test-locally": "./node_modules/.bin/lab -l -m 15000 test/index.js",
     "test-cov-html": "lab -r html -o coverage.html",
-    "test-jenkins": "node_modules/.bin/lab -m 10000 -r tap -o test.tap -r clover -o clover.xml -r junit -o junit.xml",
+    "test-jenkins": "node_modules/.bin/lab -m 10000 -r tap -o test.tap -r clover -o clover.xml -r junit -o junit.xml"
   },
   "repository": {
     "type": "git",
