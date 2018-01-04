@@ -5,167 +5,181 @@
 'use strict';
 
 
-const Lab = require( 'lab' );
-const code = require( 'code' );
-const debug = require( 'debug' )( 'hapi_redirect:test' );
-const start_server = require( '../test_server.js' );
-
+const Lab = require('lab');
+const code = require('code');
+const debug = require('debug')('hapi_redirect:test');
+const test_server = require('../test_server.js');
+const getServer = test_server.getServer;
+const tokenHeader = test_server.tokenHeader;
 let lab = exports.lab = Lab.script();
 
-lab.experiment( 'activedirectory', ()=> {
+lab.experiment('hapi redirect', () => {
 
-    lab.test( 'authentication', ( done )=> {
+    lab.test('redirect at 302 (authorized)',
+        async () => {
 
-        start_server( {
-            redirect: {
-                status_code: "401",
-                redirect: "/login"
-            }
-        } ).then( ( server )=> {
+            await getServer({
+                redirect: {
+                    status_code: "401",
+                    redirect: "/login"
+                }
+            }).then(server => {
 
-            server.method.authenticate()
-            let options = {
-                method: "GET",
-                url: "/private",
-                //credentials: {} // To bypass auth strategy
-            };
+                let options = {
+                    method: "GET",
+                    url: "/private"
+                };
 
-            server.inject( options, ( response )=> {
+                return server.inject(options).then(response => {
 
-                code.expect( response.statusCode ).to.equal( 302 );
-                server.stop();
-                done();
+                    // server.stop();
+                    code.expect(response.statusCode).to.equal(302);
 
-            } );
-        } );
-    } );
 
-    lab.test( 'redirect at 200 (authorized)', ( done )=> {
+                });
+            });
+        });
 
-        start_server( {
-            redirect: {
-                status_code: "401",
-                redirect: "/login"
-            }
-        } ).then( ( server )=> {
+    lab.test('authorized 200 (authorized)',
+        async () => {
 
-            let options = {
-                method: "GET",
-                url: "/private",
-                credentials: {} // To bypass auth strategy
-            };
+            await getServer({
+                redirect: {
+                    status_code: "401",
+                    redirect: "/login"
+                }
+            }).then(server => {
 
-            server.inject( options, ( response )=> {
+                let options = {
+                    method: "GET",
+                    url: "/private",
+                    headers: { authorization: tokenHeader('john', {}) },
+                    // credentials: {} // To bypass auth strategy
+                };
 
-                code.expect( response.statusCode ).to.equal( 200 );
-                server.stop()
-                done();
+                return server.inject(options).then(response => {
 
-            } );
-        } );
-    } );
+                    // server.stop();
+                    code.expect(response.statusCode).to.equal(200);
 
-    lab.test( 'redirect at 404 with host defined (unauthorized)', ( done )=> {
 
-        start_server( {
-            host: 'localhost',
-            redirect: {
-                status_code: "401",
-                redirect: "/login",
-                host:"http://0.0.0.0:300"
-            }
-        } ).then( ( server )=> {
+                });
+            });
+        });
 
-            let options = {
-                method: "GET",
-                url: "/private",
-                // credentials: {} // To bypass auth strategy
-            };
 
-            server.inject( options, ( response )=> {
 
-                code.expect( response.statusCode ).to.equal( 302 );
-                server.stop()
-                done();
+    lab.test('redirect at 404 with host defined (unauthorized)',
+        async () => {
 
-            } );
-        } );
-    } );
+            await getServer({
+                host: 'localhost',
+                redirect: {
+                    status_code: "401",
+                    redirect: "/login",
+                    host: "http://0.0.0.0:300"
+                }
+            }).then(server => {
 
-    lab.test( 'no redirect at 404 (not found)', ( done )=> {
-        start_server( {
-            redirect: {
-                status_code: "401",
-                redirect: "/login"
-            }
-        } ).then( ( server )=> {
-            let options = {
-                method: "GET",
-                url: "/no",
-                credentials: {} // To bypass auth strategy
-            };
+                let options = {
+                    method: "GET",
+                    url: "/private",
+                    headers: { authorization: tokenHeader('adam') }
 
-            debug( 'before inject' )
+                    // credentials: {} // To bypass auth strategy
+                };
 
-            server.inject( options, ( response )=> {
+                return server.inject(options).then(response => {
 
-                code.expect( response.statusCode ).to.equal( 404 );
-                done();
+                    code.expect(response.statusCode).to.equal(302);
+                    server.stop();
 
-            } );
-        } );
-    } )
+                });
+            });
+        });
 
-    lab.test( 'login ok', ( done )=> {
-        start_server( {
-            redirect: {
-                status_code: "401",
-                redirect: "/login"
-            }
-        } ).then( ( server )=> {
-            let options = {
-                method: "GET",
-                url: "/login",
-                credentials: {} // To bypass auth strategy
-            };
+    lab.test('no redirect at 404 (not found)',
+        async () => {
 
-            debug( 'before inject' )
+            await getServer({
+                redirect: {
+                    status_code: "401",
+                    redirect: "/login"
+                }
+            }).then((server) => {
+                let options = {
+                    method: "GET",
+                    url: "/no",
+                    credentials: {} // To bypass auth strategy
+                };
 
-            server.inject( options, ( response )=> {
+                debug('before inject')
 
-                code.expect( response.statusCode ).to.equal( 200 );
-                done();
+                return server.inject(options).then(response => {
 
-            } );
-        } );
-    } )
+                    code.expect(response.statusCode).to.equal(404);
+                    server.stop();
 
-    lab.test( 'login ok', ( done )=> {
-        start_server( {
-            redirect: [{
-                status_code: "401",
-                redirect: "/login"
-            },
-                {
-                status_code: "200",
-                redirect: "/login"
-            }
-            ]
-        } ).then( ( server )=> {
-            let options = {
-                method: "GET",
-                url: "/login",
-                credentials: {} // To bypass auth strategy
-            };
+                });
+            });
+        })
 
-            debug( 'before inject' )
+    lab.test('login ok',
+        async () => {
+            getServer({
+                redirect: {
+                    status_code: "401",
+                    redirect: "/login"
+                }
+            }).then((server) => {
+                let options = {
+                    method: "GET",
+                    url: "/login",
+                    headers: { authorization: tokenHeader('john', { algorithm: 'HS256' }) }
 
-            server.inject( options, ( response )=> {
+                    // credentials: {} // To bypass auth strategy
+                };
 
-                code.expect( response.statusCode ).to.equal( 200 );
-                done();
+                debug('before inject')
 
-            } );
-        } );
-    } )
-} );
+                return server.inject(options).then(response => {
+
+                    code.expect(response.statusCode).to.equal(200);
+                    server.stop();
+
+                });
+            });
+        })
+
+    lab.test('login ok set tow entries',
+        async () => {
+            await getServer({
+                redirect: [{
+                    status_code: "401",
+                    redirect: "/login"
+                },
+                    {
+                        status_code: "200",
+                        redirect: "/login"
+                    }
+                ]
+            }).then((server) => {
+                let options = {
+                    method: "GET",
+                    url: "/login",
+                    headers: { authorization: tokenHeader('john', { algorithm: 'HS256' }) }
+
+                    // credentials: {} // To bypass auth strategy
+                };
+
+                debug('before inject');
+
+                return server.inject(options).then(response => {
+
+                    code.expect(response.statusCode).to.equal(200);
+                    server.stop();
+
+                });
+            });
+        })
+});

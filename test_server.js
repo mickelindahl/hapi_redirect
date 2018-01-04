@@ -4,88 +4,110 @@
 
 'use strict';
 
-const Hapi = require( 'hapi' );
-const handlebars = require( 'handlebars' );
-const path = require( 'path' );
-const Promise = require( 'bluebird' );
-const debug = require( 'debug' )( 'hapi-redirect:server' )
+const Hapi = require('hapi');
+const handlebars = require('handlebars');
+const path = require('path');
+const debug = require('debug')('hapi-redirect:server')
+const Jwt = require('jsonwebtoken');
+const hapi_auth_jwt = require('@tanepiper/hapi-auth-jwt');
 
-function get_server( options ) {
-    let server = new Hapi.Server();
 
-    server.connection( { host: '0.0.0.0', port: 3000 } );
+const privateKey = 'PajeH0mz4of85T9FB1oFzaB39lbNLbDbtCQ';
 
-    server.register( [{
+const tokenHeader = (username, options = {}) =>
+    `Bearer ${Jwt.sign({user: username}, privateKey, {algorithm: 'HS256'})}`;
 
-        register: require( 'hapi-auth-jwt' ),
-        options: { key: 'secret' }
-    },
-        require( 'vision' ),
+
+let users={
+
+    'john':{data:{}}
+
+}
+
+const validate = async function (request, decodedToken) {
+
+    const credentials = users[decodedToken.user];
+    if (!credentials) {
+        throw Boom.notFound();
+    }
+    return credentials;
+};
+
+
+async function _getServer(options) {
+
+    let server = new Hapi.Server({});
+
+    await server.register([
         {
-            register: require( './index.js' ),
+
+            plugin: hapi_auth_jwt,
+            options: {key: 'secret'}
+        },
+        require('vision'),
+        {
+            plugin: require('./index.js'),
             options: options.redirect
         },
-    ] ).then( ()=> {
+    ])
 
-        server.auth.strategy( 'jwt', 'jwt', { key: 'secret' } );
+    server.auth.strategy('jwt', 'jwt', {
+        key: privateKey,
+        validateFunc: validate,
+        verifyOptions: {algorithms: ['HS256']}  // only allow HS256 algorithm
+    });
 
-        debug( path.basename( path.resolve() ) )
+    debug(path.basename(path.resolve()));
 
-        server.views( {
-            engines: {
-                html: handlebars
-            },
-            relativeTo: __dirname,
-            path:'./views'
+    server.views({
+        engines: {
+            html: handlebars
+        },
+        // relativeTo: __dirname,
+        path: __dirname + '/views'
 
-        } );
+    });
 
-        server.route( [
-            {
-                method: 'GET',
-                path: '/login',
-                handler: ( request, reply )=> {
-                    reply.view( 'public' );
-                }
-            },
-            {
-                method: 'GET',
-                path: '/private',
-                config: {
-                    auth: 'jwt'
-                },
-                handler: ( request, reply ) => {
-                    reply.view( 'private' );
-                }
+    server.route([
+        {
+            method: 'GET',
+            path: '/login',
+            handler: (request, h) => {
+                return h.view('public');
             }
+        },
+        {
+            method: 'GET',
+            path: '/private',
+            config: {
+                auth: 'jwt'
+            },
+            handler: (request, h) => {
+                return h.view('private');
+            }
+        }
 
-        ] );
+    ]);
 
-        server.app.readyForTest = true;
+    await server.initialize();
 
-    } );
+    server.app.readyForTest = true;
+
+
     return server
 }
 
-function start_servet( options ) {
-    let server = get_server( options );
-    let promise = new Promise( ( resolve, reject )=> {
-        resolve( server )
-    //
-        //     var iv = setInterval( function () {
-        //         if ( server.app.readyForTest == true ) {
-        //             clearInterval( iv );
-        //             resolve( server )
-        //
-        //         }
-        //     }, 50 );
-        } )
-        // .catch( ( err )=> {
-        //     console.log( err )
-        // } )
-    return promise
+function getServer(options) {
+    let server = _getServer(options);
+    return new Promise(resolve => {
+        resolve(server)
+
+    })
+
 }
 
-module.exports = start_servet;
-
+module.exports = {
+    getServer,
+    tokenHeader
+}
 

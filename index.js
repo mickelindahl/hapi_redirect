@@ -4,56 +4,52 @@
 
 'use strict';
 
-const debug = require('debug')('hapi-redirect:index')
+const debug = require('debug')('hapi-redirect:index');
+const Package = require('./package.json');
 
-exports.register = function ( server, options, next ) {
+exports.plugin={
+    register : async function ( server, options) {
 
-    if (options.constructor !== Array ) options=[options];
+        if (options.constructor !== Array ) options=[options];
 
-    let lookup={};
-    options.forEach((val)=>{
+        let lookup={};
+        options.forEach((val)=>{
 
-        lookup[val.status_code]={}
+            lookup[val.status_code]={}
 
-        for (let key in val){
+            for (let key in val){
 
-            lookup[val.status_code][key]=val[key]
+                lookup[val.status_code][key]=val[key];
 
-        }
-
-    })
-
-    // onPreResponse intercepts ALL errors
-    server.ext( 'onPreResponse', ( request, reply ) => {
-
-        const response = request.response;
-
-        debug(lookup)
-
-        if ( response.isBoom ) {
-            let statusCode = response.output.payload.statusCode;
-
-            if ( lookup[statusCode] && lookup[statusCode].redirect ) {
-
-                let redirect = lookup[statusCode].host
-                    ? lookup[statusCode].host + request.url.path
-                    : request.url.path;
-
-                return reply.redirect( lookup[statusCode].redirect
-                    + '?redirect=' + redirect )
             }
-        }
+        });
 
-        reply.continue();
+        // onPreResponse intercepts ALL errors
+        server.ext( 'onPreResponse', ( request, h ) => {
 
-    } );
+            debug('onPreResponse');
 
-    next();
+            const response = request.response;
 
-};
+            if ( response.isBoom ) {
+                let statusCode = response.output.payload.statusCode;
 
-exports.register.attributes = {
-    name: 'hapi_redirect',
-    version: '0.0.1'
+                if ( lookup[statusCode] && lookup[statusCode].redirect ) {
+
+                    let redirect = lookup[statusCode].host
+                        ? lookup[statusCode].host + request.url.path
+                        : request.url.path;
+
+                    return h.redirect( lookup[statusCode].redirect
+                        + '?redirect=' + redirect )
+                }
+            }
+
+            return h.continue;
+
+        } );
+    },
+    pkg:Package
+
 };
 

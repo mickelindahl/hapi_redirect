@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/lab -m 10000 -r lcov | ./node_modules/.bin/coveralls",
+    "test-locally": "./node_modules/.bin/lab -l -m 15000 test/index.js",
     "test-cov-html": "lab -r html -o coverage.html",
     "test-jenkins": "node_modules/.bin/lab -m 10000 -r tap -o test.tap -r clover -o clover.xml -r junit -o junit.xml"
   },
@@ -26,14 +27,15 @@
   },
   "homepage": "https://github.com/mickelindahl/hapi_redirect#readme",
   "devDependencies": {
-    "bluebird": "^3.4.6",
-    "code": "^4.0.0",
-    "coveralls": "^2.11.14",
-    "debug": "^2.2.0",
+    "@tanepiper/hapi-auth-jwt": "git://github.com/tanepiper/hapi-auth-jwt.git#master",
+    "code": "^5.1.2",
+    "coveralls": "^3.0.0",
+    "debug": "^3.1.0",
     "handlebars": "^4.0.5",
-    "hapi": "^15.1.1",
-    "hapi-auth-jwt": "^4.0.0",
-    "lab": "^11.1.0",
-    "vision": "^4.1.0"
+    "hapi": "^17.2.0",
+    "jsonwebtoken": "^8.1.0",
+    "lab": "^15.1.2",
+    "npm-publish-git-tag": "^1.1.14",
+    "vision": "^5.3.0"
   }
 }
