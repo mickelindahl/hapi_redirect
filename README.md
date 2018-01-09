@@ -38,7 +38,7 @@ server.register( {
 
 ### hapi-redirect.plugin
 - `options` Object with the following keys
-  - actions {array} List with redirect actions
+  - `actions` {array} List with redirect actions
     - `status_code` {string} Request status code to redirect e.g. 401 - unauthorized
     - `redirect(url)` {function} Function that should return `{ url: ..., [host:...]}`
     if redirect should be done or null if not
