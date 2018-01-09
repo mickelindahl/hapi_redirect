@@ -47,7 +47,7 @@ async function _getServer(options) {
         require('vision'),
         {
             plugin: require('./index.js'),
-            options: options.redirect
+            options: options
         },
     ])
 
@@ -69,13 +69,6 @@ async function _getServer(options) {
     });
 
     server.route([
-        {
-            method: 'GET',
-            path: '/login',
-            handler: (request, h) => {
-                return h.view('public');
-            }
-        },
         {
             method: 'GET',
             path: '/private',
