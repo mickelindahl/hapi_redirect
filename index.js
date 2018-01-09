@@ -15,10 +15,6 @@ const schema = require('./lib/schema');
 
 /**
  * - `options` Object with the following keys
- *   - `default`
- *     - redirect {string} Default redirect endpoint
- *     - `host` {string} Host that redirection comes from.
- *     Only necessary to set if it differs from the host you are redirecting to.
  *   - actions {array} List with redirect actions
  *     - `status_code` {string} Request status code to redirect e.g. 401 - unauthorized
  *     - `redirect(url)` {function} Function that should return `{ url: ..., [host:...]}`
