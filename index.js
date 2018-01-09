@@ -74,7 +74,7 @@ exports.plugin = {
                         response.host + response.url :
                         response.url;
 
-                    return h.redirect(redirect + '?redirect=' + response.url)
+                    return h.redirect(redirect + '?redirect=' + request.url.path)
                 }
 
 
