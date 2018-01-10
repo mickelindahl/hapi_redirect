@@ -18,6 +18,7 @@ const schema = require('./lib/schema');
  *   - `actions` {array} List with redirect actions
  *     - `status_code` {string} Request status code to redirect e.g. 401 - unauthorized
  *     - `redirect(url)` {function} Function that should return `{ url: ..., [host:...]}`
+ *        - `url` Current url to be redirected from
  *     if redirect should be done or null if not
  */
 exports.plugin = {
