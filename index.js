@@ -34,7 +34,13 @@ exports.plugin = {
             const response = request.response;
 
             if (response.isBoom) {
+
+                debug('onPreResponse isBoom');
+
                 let status_code = response.output.payload.statusCode;
+
+                debug('onPreResponse isBoom',status_code);
+
 
                 let candidates = []
 
@@ -75,7 +81,13 @@ exports.plugin = {
                         response.host + response.url :
                         response.url;
 
-                    return h.redirect(redirect + '?redirect=' + request.url.path)
+                    redirect = response.include_query!==false
+                        ? redirect + '?redirect=' + request.url.path
+                        : redirect
+
+                    // debug('onPreResponse',redirect, request.url, request.server.info.uri)
+
+                    return h.redirect(redirect)
                 }
 
 
