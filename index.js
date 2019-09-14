@@ -40,9 +40,8 @@ exports.plugin = {
                 let status_code = response.output.payload.statusCode;
 
                 debug('onPreResponse isBoom',status_code);
-
-
-                let candidates = []
+                
+                let candidates = [];
 
                 for (let i = 0; i < options.actions.length; i++) {
 
@@ -54,7 +53,7 @@ exports.plugin = {
 
                     }
 
-                    let response = a.redirect(request.url.path);
+                    let response = a.redirect(request.url.pathname);
 
                     if (!response) {
 
@@ -83,7 +82,7 @@ exports.plugin = {
 
                     redirect = response.include_query!==false
                         ? redirect + '?redirect=' + request.url.path
-                        : redirect
+                        : redirect;
 
                     // debug('onPreResponse',redirect, request.url, request.server.info.uri)
 
