@@ -29,18 +29,15 @@ exports.plugin = {
         // onPreResponse intercepts ALL errors
         server.ext('onPreResponse', (request, h) => {
 
-            debug('onPreResponse');
-
             const response = request.response;
 
             if (response.isBoom) {
 
-                debug('onPreResponse isBoom');
-
                 let status_code = response.output.payload.statusCode;
+                let message = response.output.payload.message;
 
-                debug('onPreResponse isBoom',status_code);
-                
+                debug('onPreResponse isBoom',request.path, status_code, message);
+
                 let candidates = [];
 
                 for (let i = 0; i < options.actions.length; i++) {
